@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOHAIB . Password Studio</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & THEMES
+       ========================================================================== */
+    :root {
+      /* Dark Theme (Default) */
+      --bg-main: #0B0F17;
+      --bg-card: #131A26;
+      --bg-card-hover: #1A2436;
+      --accent-primary: #6366F1;
+      --accent-hover: #4F46E5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(19, 26, 38, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-main: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F1F5F9;
+      --accent-primary: #4F46E5;
+      --accent-hover: #4338CA;
+      --accent-glow: rgba(79, 70, 229, 0.15);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="cyber"] {
+      --bg-main: #05050A;
+      --bg-card: #0D0E1B;
+      --bg-card-hover: #15182E;
+      --accent-primary: #00FFCC;
+      --accent-hover: #00DBAF;
+      --accent-glow: rgba(0, 255, 204, 0.3);
+      --text-main: #FFFFFF;
+      --text-muted: #8F9BB3;
+      --border-color: rgba(0, 255, 204, 0.2);
+      --glass-bg: rgba(13, 14, 27, 0.85);
+      --glass-border: rgba(0, 255, 204, 0.3);
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-heading);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* ==========================================================================
+       HEADER
+       ========================================================================== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand {
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand span {
+      color: var(--accent-primary);
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: var(--success);
+      border-radius: 50%;
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    .hero {
+      text-align: left;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 span {
+      color: var(--accent-primary);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 600px;
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .features-pills {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    /* ==========================================================================
+       MAIN APP SECTION
+       ========================================================================== */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-step {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-primary);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+    }
+
+    /* Input & Generator Boxes */
+    .password-display {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      padding: 1rem 3.5rem 1rem 1rem;
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      outline: none;
+    }
+
+    .password-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: var(--accent-primary);
+      color: #FFF;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Strength Meter & Progress */
+    .strength-meter {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+      height: 8px;
+    }
+
+    .progress-segment {
+      flex: 1;
+      background: var(--bg-main);
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    .strength-info {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Checklist */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-main);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .checklist-item.valid {
+      border-left: 3px solid var(--success);
+    }
+
+    .checklist-item.invalid {
+      border-left: 3px solid var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* Generator Controls */
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .range-slider {
+      width: 100%;
+      accent-color: var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input {
+      accent-color: var(--accent-primary);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .gen-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--accent-primary);
+      color: #FFF;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    .gen-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ==========================================================================
+       IMPROVED CUSTOM THEME SWITCHER CSS
+       ========================================================================== */
+    .theme-switcher-wrapper {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 0.9rem;
+      border-radius: 30px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .theme-btn.active {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+
+    [data-theme="cyber"] .theme-btn.active {
+      color: #000000;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      width: 100%;
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: auto;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer span b {
+      color: var(--accent-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <!-- HEADER -->
+    <header>
+      <a href="#" class="brand">
+        SOHAIB<span>.</span> <small style="font-size:0.8rem; color:var(--text-muted);">PASSWORD STUDIO</small>
+      </a>
+      <div class="badge">
+        LOCAL & PRIVATE
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-tag">✦ SIMPLE. SECURE. YOURS.</div>
+      <h1>Password power,<br><span>your way.</span></h1>
+      <p>Build a password that fits your needs. Generate one instantly or type your own and check its strength live.</p>
+      <div class="features-pills">
+        <span class="pill">✧ Live strength check</span>
+        <span class="pill">⌘ One-click copy</span>
+        <span class="pill">◈ Theme switcher</span>
+      </div>
+    </section>
+
+    <!-- APP GRID -->
+    <section class="app-grid">
+      <!-- LEFT CARD: LIVE CHECKER -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-step">01 / YOUR PASSWORD</span>
+            <h2 class="card-title">Make it yours</h2>
+          </div>
+          <span class="pill">EDITABLE</span>
+        </div>
+
+        <div class="password-display">
+          <input type="text" id="passInput" class="password-input" placeholder="Type or generate password..." autocomplete="off">
+          <button class="copy-btn" id="copyBtn">Copy</button>
+        </div>
+
+        <div class="strength-meter">
+          <div class="strength-info">
+            <span>LIVE ANALYSIS</span>
+            <strong id="strengthLabel">Waiting...</strong>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-segment" id="seg1"></div>
+            <div class="progress-segment" id="seg2"></div>
+            <div class="progress-segment" id="seg3"></div>
+            <div class="progress-segment" id="seg4"></div>
+          </div>
+          <div class="strength-info">
+            <span id="hintText">Start typing to analyze.</span>
+            <span id="charCount">0 chars</span>
+          </div>
+        </div>
+
+        <div class="checklist">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+            CHECKLIST <span style="opacity: 0.6;">— Live as you type</span>
+          </div>
+          <div class="checklist-item invalid" id="checkLength">
+            <span>8+ characters</span> <b id="iconLength">✕</b>
+          </div>
+          <div class="checklist-item invalid" id="checkUpper">
+            <span>Uppercase letter</span> <b id="iconUpper">✕</b>
+          </div>
+          <div class="checklist-item invalid" id="checkLower">
+            <span>Lowercase letter</span> <b id="iconLower">✕</b>
+          </div>
+          <div class="checklist-item invalid" id="checkNum">
+            <span>At least one number</span> <b id="iconNum">✕</b>
+          </div>
+          <div class="checklist-item invalid" id="checkSpec">
+            <span>Special character</span> <b id="iconSpec">✕</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT CARD: GENERATOR CONTROLS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-step">02 / GENERATOR</span>
+            <h2 class="card-title">Fine-tune it</h2>
+          </div>
+          <span>✳</span>
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-header">
+            <span>LENGTH</span>
+            <strong id="lengthValue">16</strong>
+          </div>
+          <input type="range" id="lengthSlider" class="range-slider" min="4" max="40" value="16">
+          <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">
+            <span>4</span><span>20</span><span>40</span>
+          </div>
+        </div>
+
+        <div class="options-group">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+            INCLUDE CHARACTERS
+          </div>
+          <label class="checkbox-label">
+            <input type="checkbox" id="incUpper" checked> Uppercase (A-Z)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="incLower" checked> Lowercase (a-z)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="incNum" checked> Numbers (0-9)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="incSpec" checked> Symbols (!@#\$)
+          </label>
+        </div>
+
+        <button class="gen-btn" id="generateBtn">Generate Password</button>
+
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+          🔒 Your password stays in this browser.
+        </p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>SOHAIB<span>.</span> PASSWORD STUDIO</span>
+      <span>Designed for your digital peace of mind <b>✦</b></span>
+    </footer>
+  </main>
+
+  <!-- IMPROVED FLOATING THEME SWITCHER -->
+  <div class="theme-switcher-wrapper">
+    <div class="theme-switcher">
+      <button class="theme-btn active" data-set-theme="dark">
+        <span>🌙</span> Dark
+      </button>
+      <button class="theme-btn" data-set-theme="light">
+        <span>☀️</span> Light
+      </button>
+      <button class="theme-btn" data-set-theme="cyber">
+        <span>⚡</span> Cyber
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // DOM Elements
+    const passInput = document.getElementById('passInput');
+    const copyBtn = document.getElementById('copyBtn');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const hintText = document.getElementById('hintText');
+    const charCount = document.getElementById('charCount');
+    
+    const segs = [
+      document.getElementById('seg1'),
+      document.getElementById('seg2'),
+      document.getElementById('seg3'),
+      document.getElementById('seg4')
+    ];
+
+    const checkLength = document.getElementById('checkLength');
+    const checkUpper = document.getElementById('checkUpper');
+    const checkLower = document.getElementById('checkLower');
+    const checkNum = document.getElementById('checkNum');
+    const checkSpec = document.getElementById('checkSpec');
+
+    const iconLength = document.getElementById('iconLength');
+    const iconUpper = document.getElementById('iconUpper');
+    const iconLower = document.getElementById('iconLower');
+    const iconNum = document.getElementById('iconNum');
+    const iconSpec = document.getElementById('iconSpec');
+
+    const lengthSlider = document.getElementById('lengthSlider');
+    const lengthValue = document.getElementById('lengthValue');
+    const incUpper = document.getElementById('incUpper');
+    const incLower = document.getElementById('incLower');
+    const incNum = document.getElementById('incNum');
+    const incSpec = document.getElementById('incSpec');
+    const generateBtn = document.getElementById('generateBtn');
+
+    // Theme Switching Logic
+    const themeButtons = document.querySelectorAll('[data-set-theme]');
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.getAttribute('data-set-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        themeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Password Generation Logic
+    function generatePassword() {
+      const len = parseInt(lengthSlider.value);
+      const u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const l = "abcdefghijklmnopqrstuvwxyz";
+      const n = "0123456789";
+      const s = "!@#\$%^&*()_+-=[]{}|;:,.<>?";
+
+      let chars = "";
+      if (incUpper.checked) chars += u;
+      if (incLower.checked) chars += l;
+      if (incNum.checked) chars += n;
+      if (incSpec.checked) chars += s;
+
+      if (!chars) {
+        alert("Please select at least one character type!");
+        return;
+      }
+
+      let generated = "";
+      for (let i = 0; i < len; i++) {
+        generated += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      passInput.value = generated;
+      analyzePassword();
+    }
+
+    // Live Analysis Logic
+    function analyzePassword() {
+      const val = passInput.value;
+      const len = val.length;
+
+      charCount.textContent = `${len} chars`;
+
+      // Rule Validation
+      const hasLen = len >= 8;
+      const hasUp = /[A-Z]/.test(val);
+      const hasLow = /[a-z]/.test(val);
+      const hasN = /[0-9]/.test(val);
+      const hasS = /[^A-Za-z0-9]/.test(val);
+
+      updateItem(checkLength, iconLength, hasLen);
+      updateItem(checkUpper, iconUpper, hasUp);
+      updateItem(checkLower, iconLower, hasLow);
+      updateItem(checkNum, iconNum, hasN);
+      updateItem(checkSpec, iconSpec, hasS);
+
+      // Calculate Score
+      let score = 0;
+      if (hasLen) score++;
+      if (hasUp && hasLow) score++;
+      if (hasN) score++;
+      if (hasS) score++;
+
+      if (len === 0) {
+        setSegments(0, 'var(--bg-main)');
+        strengthLabel.textContent = "Waiting...";
+        hintText.textContent = "Start typing to analyze.";
+      } else if (score <= 1) {
+        setSegments(1, 'var(--danger)');
+        strengthLabel.textContent = "Weak";
+        hintText.textContent = "Add numbers and symbols.";
+      } else if (score <= 3) {
+        setSegments(2, 'var(--warning)');
+        strengthLabel.textContent = "Medium";
+        hintText.textContent = "Good, but could be stronger.";
+      } else if (score === 4 && len < 12) {
+        setSegments(3, 'var(--accent-primary)');
+        strengthLabel.textContent = "Strong";
+        hintText.textContent = "Make it longer for extra safety.";
+      } else {
+        setSegments(4, 'var(--success)');
+        strengthLabel.textContent = "Very Strong";
+        hintText.textContent = "Excellent password!";
+      }
+    }
+
+    function updateItem(el, icon, isValid) {
+      if (isValid) {
+        el.className = "checklist-item valid";
+        icon.textContent = "✓";
+      } else {
+        el.className = "checklist-item invalid";
+        icon.textContent = "✕";
+      }
+    }
+
+    function setSegments(count, color) {
+      segs.forEach((seg, idx) => {
+        if (idx < count) {
+          seg.style.background = color;
+        } else {
+          seg.style.background = 'var(--bg-main)';
+        }
+      });
+    }
+
+    // Event Listeners
+    passInput.addEventListener('input', analyzePassword);
+
+    lengthSlider.addEventListener('input', (e) => {
+      lengthValue.textContent = e.target.value;
+    });
+
+    generateBtn.addEventListener('click', generatePassword);
+
+    copyBtn.addEventListener('click', () => {
+      if (!passInput.value) return;
+      navigator.clipboard.writeText(passInput.value);
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => {
+        copyBtn.textContent = "Copy";
+      }, 2000);
+    });
+
+    // Initial Trigger
+    generatePassword();
+  </script>
+</body>
+</html>
